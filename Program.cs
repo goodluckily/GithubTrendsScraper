@@ -23,11 +23,11 @@ namespace GithubTrendsScraper
             builder.Services.AddQuartzClassJobs();
 
 
-            builder.WebHost.UseKestrel(option =>
-            {
-                option.Limits.KeepAliveTimeout = TimeSpan.FromMinutes(20);
-                option.Limits.RequestHeadersTimeout = TimeSpan.FromMinutes(20);
-            });
+            //builder.WebHost.UseKestrel(option =>
+            //{
+            //    option.Limits.KeepAliveTimeout = TimeSpan.FromMinutes(20);
+            //    option.Limits.RequestHeadersTimeout = TimeSpan.FromMinutes(20);
+            //});
 
             var app = builder.Build();
 
