@@ -1,3 +1,4 @@
+using GZY.Quartz.MUI.Extensions;
 
 namespace GithubTrendsScraper
 {
@@ -10,9 +11,15 @@ namespace GithubTrendsScraper
             // Add services to the container.
 
             builder.Services.AddControllers();
+
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
+
             builder.Services.AddSwaggerGen();
+
+            builder.Services.AddQuartzUI();
+            builder.Services.AddQuartzClassJobs();
 
             var app = builder.Build();
 
@@ -25,6 +32,7 @@ namespace GithubTrendsScraper
 
             app.UseAuthorization();
 
+            app.UseQuartz(); //’‚¿Ô◊¢»ÎQuartz
 
             app.MapControllers();
 

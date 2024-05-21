@@ -1,11 +1,14 @@
 ﻿using System.Reflection.Metadata;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using System.Xml.Linq;
 using GithubTrendsScraper.Common;
 using HtmlAgilityPack;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace GithubTrendsScraper.Controllers
 {
@@ -13,14 +16,26 @@ namespace GithubTrendsScraper.Controllers
     [Route("[controller]")]
     public class TrendsScraperController : ControllerBase
     {
-        private static string url = "https://github.com/trending";
+        private static string baseUrl = "https://github.com/trending";
         public TrendsScraperController()
         {
         }
 
         [HttpGet("GetTrendingRepositories")]
-        public async Task<string> GetTrendingRepositories()
+        public async Task<string> GetTrendingRepositories([FromQuery]string lange= "any", [FromQuery] string daterange= "week")
         {
+            if (!string.IsNullOrWhiteSpace(lange))
+            {
+                var langeStr = HttpUtility.UrlEncode(lange);
+                baseUrl += $"/{langeStr}";
+            }
+            if (!string.IsNullOrWhiteSpace(daterange))
+            {
+                var daterangeStr = HttpUtility.UrlEncode(daterange);
+                baseUrl += $"?since={daterangeStr}";
+            }
+            UriBuilder uriBuilder = new UriBuilder(baseUrl);
+            string url = uriBuilder.ToString();
             var trendingRepositories = await GetTrendingRepositoriesStr(url);
             var strBuilder = new StringBuilder();
 
@@ -43,7 +58,6 @@ namespace GithubTrendsScraper.Controllers
 
             var thisDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
             SendToEmail.SendEmail("15652338313@163.com",$"GitHub，{thisDate}、趋势信息", strBuilder.ToString());
-
             //邮件发送
             return await Task.FromResult(strBuilder.ToString());
         }
