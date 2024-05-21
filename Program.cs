@@ -1,3 +1,4 @@
+using System.Net;
 using GZY.Quartz.MUI.Extensions;
 
 namespace GithubTrendsScraper
@@ -20,6 +21,13 @@ namespace GithubTrendsScraper
 
             builder.Services.AddQuartzUI();
             builder.Services.AddQuartzClassJobs();
+
+
+            builder.WebHost.UseKestrel(option =>
+            {
+                option.Limits.KeepAliveTimeout = TimeSpan.FromMinutes(20);
+                option.Limits.RequestHeadersTimeout = TimeSpan.FromMinutes(20);
+            });
 
             var app = builder.Build();
 
