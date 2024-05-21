@@ -31,7 +31,8 @@ namespace GithubTrendsScraper.Controllers
                 var str = $"""
                     {index}. **{item.Name}**:
                         - Url：`{item.RepositoryUrl}`。
-                        - 描述：{item.Description_CN}。
+                        - 描述(En)：{item.Description_CN}。
+                        - 描述(Cn)：{item.Description}。
                         - Stars⭐：{item.Stars}。    
                         - Forks🍴：{item.Forks}。
                         - Language💻：{item.Language}。
