@@ -46,17 +46,14 @@ namespace GithubTrendsScraper.Controllers
                 {
                     var item = trendingRepositories[i];
                     var index = i + 1;
-                    var str = $"""
-                    {index}. **{item.Name}**:
-                        - Url：`{item.RepositoryUrl}`。
-                        - 描述(En)：{item.Description_CN}。
-                        - 描述(Cn)：{item.Description}。
-                        - Stars⭐：{item.Stars}。    
-                        - Forks🍴：{item.Forks}。
-                        - Language💻：{item.Language}。
-                    ----------------------------------------
-                    """;
-                    strBuilder.AppendLine(str);
+                    strBuilder.AppendLine($"### **{index}.{item.Name}**");
+                    strBuilder.AppendLine($"  * Url：{item.RepositoryUrl}");
+                    strBuilder.AppendLine($"  * 描述(En)：{item.Description_CN}");
+                    strBuilder.AppendLine($"  * 描述(Cn)：{item.Description}");
+                    strBuilder.AppendLine($"  * Stars⭐：{item.Stars}");
+                    strBuilder.AppendLine($"  * Forks🍴：{item.Forks}");
+                    strBuilder.AppendLine($"  * Language💻：{item.Language}");
+                    strBuilder.AppendLine("----------------------------------------");
                 }
 
                 var thisDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
@@ -65,7 +62,7 @@ namespace GithubTrendsScraper.Controllers
                 return await Task.FromResult(strBuilder.ToString());
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 throw;
             }

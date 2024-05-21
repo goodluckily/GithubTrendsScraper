@@ -39,9 +39,9 @@ namespace GithubTrendsScraper.Common
                 smtpClient.Send(mailMessage);//发送邮件
                 return true;
             }
-            catch (SmtpException ex)
+            catch (Exception ex)
             {
-                throw ex;
+                throw;
             }
         }
     }
