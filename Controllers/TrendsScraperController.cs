@@ -57,7 +57,7 @@ namespace GithubTrendsScraper.Controllers
                 }
 
                 var thisDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-                SendToEmail.SendEmail("15652338313@163.com", $"GitHub，{thisDate}、趋势信息", strBuilder.ToString());
+                SendToEmail.SendEmail("15652338313@163.com", $"GitHub，{lange}，{daterange}，{thisDate}、趋势信息", strBuilder.ToString());
                 //邮件发送
                 return await Task.FromResult(strBuilder.ToString());
 
