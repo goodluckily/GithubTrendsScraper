@@ -18,9 +18,14 @@ namespace GithubTrendsScraper.Common
 
         public string GetChineseTranslation(string descText)
         {
-            int n = new Random().Next(2000, 4000);
+            int n = new Random().Next(1000, 3500);
             Task.Delay(n).Wait();
             var unescapeRetString = GetUnescapeRetString(descText, "en", "zh");
+            Console.WriteLine($"{unescapeRetString}");
+            if (string.IsNullOrWhiteSpace(unescapeRetString)) 
+            {
+                return "";
+            }
             var amode = JsonConvert.DeserializeObject<TranslationResult>(unescapeRetString);
             return amode?.trans_result.FirstOrDefault()?.dst ?? "";
         }

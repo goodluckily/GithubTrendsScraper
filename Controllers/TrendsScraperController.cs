@@ -79,33 +79,43 @@ namespace GithubTrendsScraper.Controllers
 
             var repoNodes = htmlDocument.DocumentNode.SelectNodes("//article[@class='Box-row']");
 
-            foreach (var repoNode in repoNodes)
+            //for (int i = repoNodes.Count - 1; i >= 0; i--)
+            for (int i = 0; i < repoNodes.Count; i++)
             {
-                var repo = new Repository();
-
-                var nodeName = repoNode.ChildNodes.Where(x => x.Name == "h2").FirstOrDefault()?.InnerText?.Trim().Replace("\n", "").Replace(" ", "") ?? "";
-                repo.Name = nodeName;
-                repo.Description = repoNode.SelectSingleNode("./p")?.InnerText.Trim();
-                if (!string.IsNullOrWhiteSpace(repo.Description))
+                Console.WriteLine(i);
+                var repoNode = repoNodes[i];
+                try
                 {
-                    var trans = new TranslationChinese();
-                    //需要翻译中文 百度翻译
-                    repo.Description_CN = trans.GetChineseTranslation(repo.Description);
+                    var repo = new Repository();
+
+                    var nodeName = repoNode.ChildNodes.Where(x => x.Name == "h2").FirstOrDefault()?.InnerText?.Trim().Replace("\n", "").Replace(" ", "") ?? "";
+                    repo.Name = nodeName;
+                    repo.Description = repoNode.SelectSingleNode("./p")?.InnerText.Trim();
+                    if (!string.IsNullOrWhiteSpace(repo.Description))
+                    {
+                        var trans = new TranslationChinese();
+                        //需要翻译中文 百度翻译
+                        repo.Description_CN = trans.GetChineseTranslation(repo.Description);
+                    }
+
+                    var afsafd = repoNode.SelectNodes("h2[@class='h3 lh-condensed']/a");
+                    var Url = afsafd.FirstOrDefault()?.GetAttributeValue("href", "") ?? string.Empty;
+                    repo.RepositoryUrl = !string.IsNullOrWhiteSpace(Url) ? "github.com" + Url : "";
+
+                    var starsNode = repoNode.SelectSingleNode(".//a[contains(@href, '/stargazers')]");
+                    repo.Stars = starsNode != null ? starsNode.InnerText.Trim() : "0";
+
+                    var forkNode = repoNode.SelectSingleNode(".//a[contains(@href, '/forks')]");
+                    repo.Forks = forkNode?.InnerText?.Trim().Replace(",", "") ?? "0";
+
+                    var languageNode = repoNode.SelectSingleNode(".//span[@itemprop='programmingLanguage']");
+                    repo.Language = languageNode != null ? languageNode.InnerText.Trim() : "Unknown";
+                    repositories.Add(repo);
                 }
+                catch (Exception ex)
+                {
 
-                var afsafd = repoNode.SelectNodes("h2[@class='h3 lh-condensed']/a");
-                var Url = afsafd.FirstOrDefault()?.GetAttributeValue("href", "") ?? string.Empty;
-                repo.RepositoryUrl = !string.IsNullOrWhiteSpace(Url) ? "github.com" + Url : "";
-
-                var starsNode = repoNode.SelectSingleNode(".//a[contains(@href, '/stargazers')]");
-                repo.Stars = starsNode != null ? starsNode.InnerText.Trim() : "0";
-
-                var forkNode = repoNode.SelectSingleNode(".//a[contains(@href, '/forks')]");
-                repo.Forks = forkNode?.InnerText?.Trim().Replace(",", "") ?? "0";
-
-                var languageNode = repoNode.SelectSingleNode(".//span[@itemprop='programmingLanguage']");
-                repo.Language = languageNode != null ? languageNode.InnerText.Trim() : "Unknown";
-                repositories.Add(repo);
+                }
             }
 
             return repositories;
