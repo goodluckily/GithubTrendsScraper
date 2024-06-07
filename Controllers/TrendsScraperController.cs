@@ -23,7 +23,7 @@ namespace GithubTrendsScraper.Controllers
         }
 
         [HttpGet("GetTrendingRepositories")]
-        public async Task<string> GetTrendingRepositories([FromQuery]string lange= "any", [FromQuery] string daterange= "weekly")
+        public async Task<string> GetTrendingRepositories([FromQuery] string lange = "any", [FromQuery] string daterange = "weekly")
         {
             try
             {
@@ -48,8 +48,8 @@ namespace GithubTrendsScraper.Controllers
                     var index = i + 1;
                     strBuilder.AppendLine($"### **{index}.{item.Name}**");
                     strBuilder.AppendLine($"  * Url：{item.RepositoryUrl}");
-                    strBuilder.AppendLine($"  * 描述(En)：{item.Description_CN}");
-                    strBuilder.AppendLine($"  * 描述(Cn)：{item.Description}");
+                    strBuilder.AppendLine($"  * 描述(Cn)：{item.Description_CN}");
+                    strBuilder.AppendLine($"  * 描述(En)：{item.Description}");
                     strBuilder.AppendLine($"  * Stars⭐：{item.Stars}");
                     strBuilder.AppendLine($"  * Forks🍴：{item.Forks}");
                     strBuilder.AppendLine($"  * Language💻：{item.Language}");
